@@ -42,10 +42,9 @@ void SplitRangePID::compute(double setpoint, double pv, double dt, double &heate
 
     double P_out = Kp * error;
 
-    // Calculate integral
     integral += (Ki * error * dt);
     
-    // INDEPENDENT ANTI-WINDUP
+    // Anti-windup
     if (integral > heat_max) integral = heat_max;
     if (integral < -cool_max) integral = -cool_max;
 
@@ -54,7 +53,7 @@ void SplitRangePID::compute(double setpoint, double pv, double dt, double &heate
     prev_pv = pv;
 
     if (error > -deadband && error < deadband) {
-        return; // Hardware off, but integral is gracefully handled above
+        return; 
     }
 
     double total_out = P_out + integral + D_out;
