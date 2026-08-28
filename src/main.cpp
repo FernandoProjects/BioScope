@@ -65,7 +65,7 @@ void setup() {
                 
                 // Turn LEDs red upon start
                 for(int i=0; i<NUMPIXELS; i++) {
-                    pixels.setPixelColor(i, pixels.Color(128, 0, 0)); 
+                    pixels.setPixelColor(i, pixels.Color(3, 0, 0)); 
                 }
                 pixels.show();
 
