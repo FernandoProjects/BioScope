@@ -17,15 +17,18 @@
 
 // Globals & objects
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
-
 Adafruit_NeoPixel pixels(NUMPIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
-
-// Instantiate PID with 0.10 C deadband
 SplitRangePID incubatorPID(0.10);
 
 const double target_setpoint = 37.0;
 unsigned long last_time = 0;
-const unsigned long sample_interval = 2000; 
+const unsigned long sample_interval = 2000;
+
+// ---- Máquina de estados (reemplaza los while(true) bloqueantes) ----
+enum SystemState { WAITING, RUNNING };
+SystemState state = WAITING;
+
+bool is_maintaining = false;  // antes era "static" dentro de loop(); ahora se resetea en cada START
 
 void setup() {
     Serial.begin(115200);
@@ -56,64 +59,64 @@ void setup() {
     pixels.show();
 
     Serial.println("Waiting for START command from Python...");
-    while (true) {
-        if (Serial.available() > 0) {
-            String command = Serial.readStringUntil('\n');
-            command.trim();
-            if (command == "START") {
-                digitalWrite(PTC_EN, HIGH); 
-                
-                // Turn LEDs red upon start
-                for(int i=0; i<NUMPIXELS; i++) {
-                    pixels.setPixelColor(i, pixels.Color(128, 0, 0)); 
-                }
-                pixels.show();
-
-                last_time = millis();       
-                break;                      
-            }
-        }
-        delay(100);
-    }
+    state = WAITING;
 }
 
 void loop() {
     if (Serial.available() > 0) {
         String command = Serial.readStringUntil('\n');
         command.trim();
-        if (command == "STOP") {
+
+        if (command == "START" && state == WAITING) {
+            is_maintaining = false;
+            incubatorPID.setOutputLimits(20.0, 90.0);
+
+            digitalWrite(PTC_EN, HIGH);
+
+            // Turn LEDs red upon start
+            for (int i = 0; i < NUMPIXELS; i++) {
+                pixels.setPixelColor(i, pixels.Color(3, 0, 0));
+            }
+            pixels.show();
+
+            last_time = millis();
+            state = RUNNING;
+
+        } else if (command == "STOP" && state == RUNNING) {
             analogWrite(PTC_RPWM, 0);
             analogWrite(PELTIER_PIN, 0);
             digitalWrite(PTC_EN, LOW);
-            
+
             pixels.clear();
             pixels.show();
 
             Serial.println("STOP command received. Hardware disabled.");
-            while(true) { delay(1000); } 
+            state = WAITING;
         }
     }
 
+    if (state != RUNNING) {
+        return;  // no corre el control mientras espera, pero ya no bloquea el programa
+    }
+
     unsigned long current_time = millis();
-    
+
     // Execute strictly every 2 seconds
     if (current_time - last_time >= sample_interval) {
-        
-        double dt = (current_time - last_time) / 1000.0; 
+
+        double dt = (current_time - last_time) / 1000.0;
         last_time = current_time;
 
-        // Poll sensors 
+        // Poll sensors
         double current_temp = sht31.readTemperature();
-        if (isnan(current_temp)) current_temp = 0.0; 
-        
+        if (isnan(current_temp)) current_temp = 0.0;
+
         double current_hum = sht31.readHumidity();
         if (isnan(current_hum)) current_hum = 0.0;
 
-        static bool is_maintaining = false;
-        
         if (!is_maintaining && current_temp >= target_setpoint) {
-            is_maintaining = true; 
-            // The initial approach is complete. 
+            is_maintaining = true;
+            // The initial approach is complete.
             // Unlock 30% power to reduce undershoots.
             incubatorPID.setOutputLimits(30.0, 90.0);
             Serial.println("[SYSTEM] Target reached. Heater ceiling raised to 30%.");
@@ -127,7 +130,7 @@ void loop() {
         // Convert 0-100% effort to 0-255 8-bit PWM
         int heater_pwm_8bit = (int)(heater_effort * 2.55);
         int cooler_pwm_8bit = (int)(cooler_effort * 2.55);
-        
+
         analogWrite(PTC_RPWM, heater_pwm_8bit);
         analogWrite(PELTIER_PIN, cooler_pwm_8bit);
 
