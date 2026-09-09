@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control de Cultivo</title>
+<style>
+  body { font-family: sans-serif; max-width: 700px; margin: 30px auto; }
+  #video, #halo_img { width: 100%; border: 1px solid #ccc; }
+  .estado { padding: 10px; background: #f0f0f0; margin: 10px 0; white-space: pre-wrap; }
+  button { padding: 10px 20px; margin-right: 10px; font-size: 16px; margin-top: 5px; }
+  input { width: 80px; margin-right: 5px; padding: 5px; }
+  #resultado { white-space: pre-wrap; background: #eef; padding: 10px; margin-top: 15px; }
+  h3 { margin-top: 25px; margin-bottom: 8px; }
+  #halos_lista { padding: 10px; background: #fffbe6; margin-top: 10px; }
+  #halos_lista span { display: inline-block; margin-right: 15px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>Control de Cultivo</h1>
+
+<h3>Video en vivo</h3>
+<img id="video" src="/video_feed">
+
+<div class="estado" id="estado">Cargando estado...</div>
+
+<h3>Setpoint (antes de iniciar)</h3>
+<input type="number" step="0.1" id="setpoint" placeholder="37.0">
+<button onclick="guardarSetpoint()">Aplicar setpoint</button>
+
+<h3>Experimento</h3>
+<button onclick="iniciar()">Iniciar experimento</button>
+<button onclick="detener()">Detener experimento</button>
+
+<h3>Últimos halos medidos</h3>
+<img id="halo_img" src="" alt="Aún no hay medición de halos" style="display:none;">
+<div id="halos_lista">Esperando primera medición...</div>
+
+<div id="resultado"></div>
+
+<script>
+async function actualizarEstado() {
+  const res = await fetch('/session/status');
+  const data = await res.json();
+  document.getElementById('estado').innerText = JSON.stringify(data, null, 2);
+
+  if (data.latest_halos_mm2 && data.latest_halos_mm2.length > 0) {
+    const halosTxt = data.latest_halos_mm2
+      .map((v, i) => `<span>H${i+1}: ${v} mm²</span>`)
+      .join('');
+    document.getElementById('halos_lista').innerHTML =
+      `Última medición: ${data.latest_measurement_time || ''} — Disco detectado: ${data.latest_disco_detectado}<br>${halosTxt}`;
+
+    const img = document.getElementById('halo_img');
+    img.src = '/latest_halo_image?t=' + Date.now();  // evita caché del navegador
+    img.style.display = 'block';
+  }
+}
+setInterval(actualizarEstado, 5000);
+actualizarEstado();
+
+async function guardarSetpoint() {
+  const value = parseFloat(document.getElementById('setpoint').value);
+  const res = await fetch('/setpoint', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ value })
+  });
+  const data = await res.json();
+  document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+}
+
+async function iniciar() {
+  const res = await fetch('/session/start', { method: 'POST' });
+  const data = await res.json();
+  document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+}
+
+async function detener() {
+  const res = await fetch('/session/stop', { method: 'POST' });
+  const data = await res.json();
+  document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>

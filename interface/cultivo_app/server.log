@@ -1,0 +1,39 @@
+[ WARN:0@1.580] global cap_v4l.cpp:914 open VIDEOIO(V4L2:/dev/video1): can't open camera by index
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+[video4linux2,v4l2 @ 0x3783a6f0] Not a video capture device.
+INFO:     Started server process [2844]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+No se pudo abrir /dev/ttyUSB0 ([Errno 2] could not open port /dev/ttyUSB0: [Errno 2] No such file or directory: '/dev/ttyUSB0'). Usando datos DUMMY para pruebas.
+INFO:     172.18.16.132:37658 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48114 - "GET / HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48114 - "GET /video_feed HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     172.18.16.132:48124 - "GET /session/status HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
