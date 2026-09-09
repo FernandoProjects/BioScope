@@ -59,7 +59,29 @@ void setup() {
     pixels.show();
 
     Serial.println("Waiting for START command from Python...");
+<<<<<<< HEAD
     state = WAITING;
+=======
+    while (true) {
+        if (Serial.available() > 0) {
+            String command = Serial.readStringUntil('\n');
+            command.trim();
+            if (command == "START") {
+                digitalWrite(PTC_EN, HIGH); 
+                
+                // Turn LEDs red upon start
+                for(int i=0; i<NUMPIXELS; i++) {
+                    pixels.setPixelColor(i, pixels.Color(3, 0, 0)); 
+                }
+                pixels.show();
+
+                last_time = millis();       
+                break;                      
+            }
+        }
+        delay(100);
+    }
+>>>>>>> 1ba7015f871fbd19f17eb575cc2e5500c4935eef
 }
 
 void loop() {
