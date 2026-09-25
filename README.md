@@ -21,8 +21,9 @@ BioScope is a low-cost, automated bacteria incubator designed to study bacterial
 ## Data Structure
 The system automatically generates 2 CSV files at the conclusion of each experiment, one for environmental data and the other one for inhibiton zone areas. The system additionally generates an automatic time-lapse of the experiment.
 
+The following is an example of the camera view for an experiment:
+<img width="640" height="480" alt="289_194216" src="https://github.com/user-attachments/assets/33bcaf78-c644-417e-a6db-8526280859e2" />
 
-https://github.com/user-attachments/assets/9de2d341-ca5e-4e23-bd99-b23b1e0507d8
 
 
 
