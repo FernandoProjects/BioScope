@@ -1,4 +1,4 @@
-# BioScope: High-Altitude Biological Incubator & Data Farm
+# BioScope: Bacteria Incubator
 
 ## Overview
 BioScope is a low-cost, automated bacteria incubator designed to study bacterial growth and antibiotic inhibition zones.  
