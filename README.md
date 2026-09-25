@@ -2,7 +2,7 @@
 
 ## Overview
 BioScope is a low-cost, automated bacteria incubator designed to study bacterial growth and antibiotic inhibition zones.  
-<img width="3438*0.5" height="1851*0.5" alt="IMG_6736" src="https://github.com/user-attachments/assets/76f27a21-5478-4814-82f3-1df4af8719c3" />
+<img width="3438*0." height="1851*0.1" alt="IMG_6736" src="https://github.com/user-attachments/assets/76f27a21-5478-4814-82f3-1df4af8719c3" />
 <img width="2918" height="2647" alt="IMG_6742" src="https://github.com/user-attachments/assets/497fc104-c2fb-4fb1-9118-30a0efd73dac" />
 
 ## Core Architecture
