@@ -2,6 +2,8 @@
 
 ## Overview
 BioScope is a low-cost, automated bacteria incubator designed to study bacterial growth and antibiotic inhibition zones.  
+<img width="3438" height="1851" alt="IMG_6736" src="https://github.com/user-attachments/assets/76f27a21-5478-4814-82f3-1df4af8719c3" />
+<img width="2918" height="2647" alt="IMG_6742" src="https://github.com/user-attachments/assets/497fc104-c2fb-4fb1-9118-30a0efd73dac" />
 
 ## Core Architecture
 
@@ -23,5 +25,3 @@ The system automatically generates 2 CSV files at the conclusion of each experim
 *   `/src`: Contains the ESP32 C++ source code, including `main.cpp` and the custom `SplitRangePID` class.
 *   `/interface/cultivo_app`: Contains the GUI `main.py` and computer vision processing `vision_halos.py`.
 *   `/software`: Contains the Python GUI, serial communication parser, and data logging scripts.
-*   `/cad`: 2D designs for the laser-cut MDF walls and 3D printable files (STL/STEP) for the sensor mounts and optical rig.
-
