@@ -19,7 +19,12 @@ BioScope is a low-cost, automated bacteria incubator designed to study bacterial
 *   **Active Anti-Windup:** Independent integral clamping prevents asymmetrical thermal runaway during active cooling cycles.
 
 ## Data Structure
-The system automatically generates 2 CSV files at the conclusion of each experiment, one for environmental data and the other one for inhibiton zone areas.
+The system automatically generates 2 CSV files at the conclusion of each experiment, one for environmental data and the other one for inhibiton zone areas. The system additionally generates an automatic time-lapse of the experiment.
+
+
+https://github.com/user-attachments/assets/9de2d341-ca5e-4e23-bd99-b23b1e0507d8
+
+
 
 ## Repository Structure
 *   `/src`: Contains the ESP32 C++ source code, including `main.cpp` and the custom `SplitRangePID` class.
