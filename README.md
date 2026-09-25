@@ -1,4 +1,4 @@
-# BioScope: Bacteria Incubator with live monitoring
+# BioScope: Bacteria Incubator With Live Monitoring
 
 ## Overview
 BioScope is a low-cost, automated bacteria incubator designed to study bacterial growth and antibiotic inhibition zones.  
