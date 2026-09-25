@@ -21,7 +21,7 @@ The system automatically generates 2 CSV files at the conclusion of each experim
 
 ## Repository Structure
 *   `/src`: Contains the ESP32 C++ source code, including `main.cpp` and the custom `SplitRangePID` class.
-*   `/interface/cultivo_app`: Contains the GUI and computer vision model.
+*   `/interface/cultivo_app`: Contains the GUI `main.py` and computer vision processing `vision_halos.py`.
 *   `/software`: Contains the Python GUI, serial communication parser, and data logging scripts.
 *   `/cad`: 2D designs for the laser-cut MDF walls and 3D printable files (STL/STEP) for the sensor mounts and optical rig.
 
