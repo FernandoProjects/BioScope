@@ -11,7 +11,11 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
-MODEL_PATH = os.path.expanduser("~/cultivo_app/modelo_halos_bioscope/best.pt")
+MODEL_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "vision_model",
+    "best.pt",
+)
 DIAMETRO_DISCO_MM = 7.0
 CLASE_DISCO = 0
 CLASE_HALO = 1
@@ -109,7 +113,7 @@ def medir_halos(ruta_imagen, guardar_anotada=True):
 # ---- Modo standalone: probar el modelo en una carpeta de imágenes ----
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 vision_halos.py <carpeta_con_imagenes>")
+        print("Uso: python3 vision_program.py <carpeta_con_imagenes>")
         sys.exit(1)
 
     carpeta = sys.argv[1]

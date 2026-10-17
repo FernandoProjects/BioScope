@@ -20,7 +20,7 @@ Adafruit_SHT31 sht31 = Adafruit_SHT31();
 Adafruit_NeoPixel pixels(NUMPIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
 SplitRangePID incubatorPID(0.10);
 
-const double target_setpoint = 37.0;
+double target_setpoint = 37.0;
 unsigned long last_time = 0;
 const unsigned long sample_interval = 2000;
 
@@ -67,7 +67,17 @@ void loop() {
         String command = Serial.readStringUntil('\n');
         command.trim();
 
-        if (command == "START" && state == WAITING) {
+        if (command.startsWith("SET:") && state == WAITING) {
+            String value_text = command.substring(4);
+            double requested_setpoint = value_text.toDouble();
+
+            if (requested_setpoint > 0.0 && requested_setpoint <= 60.0) {
+                target_setpoint = requested_setpoint;
+                Serial.printf("[SYSTEM] Setpoint updated to %.1f C.\n", target_setpoint);
+            } else {
+                Serial.println("[ERROR] Setpoint must be between 0 and 60 C.");
+            }
+        } else if (command == "START" && state == WAITING) {
             is_maintaining = false;
             incubatorPID.setOutputLimits(20.0, 90.0);
 

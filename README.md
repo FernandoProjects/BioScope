@@ -27,5 +27,5 @@ The following is an example of the camera view for an experiment:
 
 ## Repository Structure
 *   `/src`: Contains the ESP32 C++ source code, including `main.cpp` and the custom `SplitRangePID` class.
-*   `/interface/cultivo_app`: Contains the GUI `main.py` and computer vision processing `vision_halos.py`.
-*   `/software`: Contains the Python GUI, serial communication parser, and data logging scripts.
+*   `/interface`: Contains the GUI `main.py`, computer vision processing `vision_program.py`, HTML templates, and the runtime YOLO model in `vision_model/`.
+*   `/model_training`: Contains model-training results and documentation artifacts.

@@ -3,7 +3,6 @@ import csv
 import glob
 import os
 import random
-import subprocess
 import threading
 import time
 
@@ -14,10 +13,11 @@ from fastapi.responses import StreamingResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-import vision_halos
+import vision_program
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=os.path.join(APP_DIR, "templates"))
 
 BASE_DIR = os.path.expanduser("~/experimentos")
 SERIAL_PORT = "/dev/ttyUSB0"
@@ -67,7 +67,7 @@ camera = CameraManager(index=0, focus_value=25)
 
 # Precarga el modelo YOLO en un hilo aparte al arrancar, para que el primer
 # ciclo de medición (5 min después de iniciar) no tenga que esperar la carga.
-threading.Thread(target=vision_halos._get_model, daemon=True).start()
+threading.Thread(target=vision_program._get_model, daemon=True).start()
 
 
 # ---------- Lector / escritor serial ----------
@@ -198,7 +198,7 @@ async def logger_halos(session):
 
             if ok:
                 try:
-                    resultado = await asyncio.to_thread(vision_halos.medir_halos, img_path)
+                    resultado = await asyncio.to_thread(vision_program.medir_halos, img_path)
                     halos_mm2 = resultado["halos_mm2"]
                     disco_detectado = resultado["disco_detectado"]
                     imagen_anotada = resultado["imagen_anotada"]
@@ -225,25 +225,28 @@ async def logger_halos(session):
 
 
 def generar_timelapse(session):
-    imgs = glob.glob(os.path.join(session.img_folder, "*.jpg"))
-    if not imgs:
+    all_images = sorted(glob.glob(os.path.join(session.img_folder, "*.jpg")))
+    images = [path for path in all_images if "_anotada" not in path]
+    if not images:
         return None
+
     output = os.path.join(session.folder, "timelapse.mp4")
-    cmd = [
-        "ffmpeg", "-y",
-        "-framerate", "10",
-        "-pattern_type", "glob",
-        "-i", os.path.join(session.img_folder, "*.jpg"),
-        "-c:v", "libx264",
-        "-pix_fmt", "yuv420p",
-        output,
-    ]
-    try:
-        subprocess.run(cmd, check=True, capture_output=True)
-        return output
-    except subprocess.CalledProcessError as e:
-        print("Error generando timelapse:", e.stderr.decode(errors="ignore"))
+    first_frame = cv2.imread(images[0])
+    if first_frame is None:
+        print("Error generando timelapse: no se pudo leer la primera imagen")
         return None
+
+    height, width = first_frame.shape[:2]
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    video = cv2.VideoWriter(output, fourcc, 30.0, (width, height))
+
+    for image_path in images:
+        frame = cv2.imread(image_path)
+        if frame is not None:
+            video.write(frame)
+
+    video.release()
+    return output
 
 
 # ---------- Endpoints ----------
