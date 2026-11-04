@@ -31,6 +31,6 @@ The following is an example of the camera view for an experiment:
 *   `/interface`: Contains the Raspberry Pi GUI, serial communication, experiment logging, live camera feed, computer vision processing, HTML templates, and the runtime YOLO model in `vision_model/`.
 *   `/model_training`: Contains the YOLO model training configuration, evaluation metrics, plots, and training/validation artifacts.
 *   `/CAD`: Contains the incubator's mechanical design files, including technical drawings and STL files for 3D-printable parts.
-*   `/Results`: Contains experimental results from 24-hour experiments, including recorded data, generated plots, captured images, and timelapse videos.
+*   `/Results`: Contains experimental results from 24-hour experiments, including plots of recorded data and timelapse videos.
 *   `/lib`: Reserved for project-specific PlatformIO libraries.
 *   `platformio.ini`: Defines the ESP32 board, framework, monitor settings, and library dependencies.

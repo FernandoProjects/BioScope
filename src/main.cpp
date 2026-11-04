@@ -24,11 +24,10 @@ double target_setpoint = 37.0;
 unsigned long last_time = 0;
 const unsigned long sample_interval = 2000;
 
-// ---- Máquina de estados (reemplaza los while(true) bloqueantes) ----
 enum SystemState { WAITING, RUNNING };
 SystemState state = WAITING;
 
-bool is_maintaining = false;  // antes era "static" dentro de loop(); ahora se resetea en cada START
+bool is_maintaining = false;  
 
 void setup() {
     Serial.begin(115200);
@@ -52,7 +51,7 @@ void setup() {
     // Configure controller gains
     incubatorPID.setHeaterGains(11.94, 0.01145, 0.0); // PI Control for Heater
     incubatorPID.setCoolerGains(1000.0, 0.0, 0.0);    // ON/OFF control for Peltier
-    incubatorPID.setOutputLimits(20.0, 90.0);          // Prevent heat soak
+    incubatorPID.setOutputLimits(20.0, 90.0);         // Prevent heat soak
 
     pixels.begin();
     pixels.clear();
@@ -106,7 +105,7 @@ void loop() {
     }
 
     if (state != RUNNING) {
-        return;  // no corre el control mientras espera, pero ya no bloquea el programa
+        return;  
     }
 
     unsigned long current_time = millis();
